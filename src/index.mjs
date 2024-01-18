@@ -61,6 +61,54 @@ app.post("/api/product", (req, res) => {
   return res.status(201).send(productId);
 });
 
+// PUT method
+
+app.put("/api/product/:id", (req, res) => {
+  const {
+    body,
+    params: { id },
+  } = req;
+
+  const parseId = parseInt(id);
+
+  if (isNaN(parseId)) return res.sendStatus(400);
+
+  const findUseIndex = mockUser.find((product) => product.id === parseId);
+
+  if (findUseIndex - 1) return res.sendStatus(404);
+  mockUser[findUseIndex] = { id: { parseId, ...body } };
+
+  return res.sendStatus(200);
+});
+// PATCH method
+app.patch("/api/product/:id", (req, res) => {
+  const {
+    body,
+    params: { id },
+  } = req;
+
+  const parseIds = parseInt(id);
+  console.log(parseIds);
+  if (isNaN(parseIds)) return res.send(400);
+
+  const findexIndex = mockUser.find((product) => product.id === parseIds);
+  if (findexIndex === -1) return res.sendStatus(404);
+  mockUser[findexIndex] = { ...mockUser[findexIndex], ...body };
+  return res.sendStatus(200);
+});
+
+//DELETE
+app.delete("/api/product/:id", (req, res) => {
+  const paramsId = parseInt(req.params.id);
+  console.log(paramsId);
+  if (isNaN(paramsId)) return res.sendStatus(400);
+
+  const findUserIndex = mockUser.findIndex((user) => user.id === paramsId);
+  console.log(findUserIndex);
+  if (findUserIndex === -1) return res.sendStatus(404);
+  mockUser.splice(findUserIndex);
+  return res.sendStatus(200);
+});
 app.listen(PORT, () => {
   console.log(`Running Port is ${PORT}`);
 });
