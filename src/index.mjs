@@ -1,4 +1,15 @@
 import express from "express";
+import {
+  query,
+  validationResult,
+  body,
+  matchedData,
+  checkSchema,
+} from "express-validator";
+import {
+  createQuerrySchemas,
+  createUserValidationSchemas,
+} from "./utils/validationSchemas.mjs";
 
 const app = express();
 
@@ -53,30 +64,57 @@ app.get("/api/product/:id", (req, res) => {
 
 // fillter user
 
-app.get("/api/product", (req, res) => {
-  const {
-    query: { filter, value },
-  } = req;
+app.get(
+  "/api/product",
+  checkSchema(createQuerrySchemas),
+  // query("filter")
+  //   .isString()
+  //   .notEmpty()
+  //   .withMessage("Must not be empty")
+  //   .isLength({ min: 3, max: 30 })
+  //   .withMessage("Must be at least 3 to 10 characters"),
+  (req, res) => {
+    const result = validationResult(req);
+    console.log("res", result);
 
-  //   when a filter and values are undefined
-  if (!filter && !value) return res.send(mockUser);
+    const {
+      query: { filter, value },
+    } = req;
 
-  if (filter && value)
-    return res.send(
-      mockUser.filter((product) => product[filter].includes(value))
-    );
+    //   when a filter and values are undefined
+    if (!filter && !value) return res.send(mockUser);
 
-  res.send(mockUser);
-});
+    if (filter && value)
+      return res.send(
+        mockUser.filter((product) => product[filter].includes(value))
+      );
+
+    res.send(mockUser);
+  }
+);
 
 // POST Method
-app.post("/api/product", (req, res) => {
-  const { body } = req;
-  const productId = { id: mockUser[mockUser.length - 1].id + 1, ...body };
-  mockUser.push(productId);
+app.post(
+  "/api/product",
+  checkSchema(createUserValidationSchemas),
 
-  return res.status(201).send(productId);
-});
+  (req, res) => {
+    const result = validationResult(req);
+    console.log("res", result);
+
+    if (!result.isEmpty()) {
+      return res.status(400).send({ error: result.array() });
+    }
+
+    const data = matchedData(req);
+
+    // const { body } = req;
+    const productId = { id: mockUser[mockUser.length - 1].id + 1, ...data };
+    mockUser.push(productId);
+
+    return res.status(201).send(productId);
+  }
+);
 
 // PUT method
 
@@ -123,14 +161,21 @@ app.patch("/api/product/:id", (req, res) => {
 });
 
 //DELETE
-app.delete("/api/product/:id", (req, res) => {
-  const paramsId = parseInt(req.params.id);
-  console.log(paramsId);
-  if (isNaN(paramsId)) return res.sendStatus(400);
+app.delete("/api/product/:id", resolveIndexByUserId, (req, res) => {
+  /* Without MiddleWare */
 
-  const findUserIndex = mockUser.findIndex((user) => user.id === paramsId);
-  console.log(findUserIndex);
-  if (findUserIndex === -1) return res.sendStatus(404);
+  // const paramsId = parseInt(req.params.id);
+  // console.log(paramsId);
+
+  // if (isNaN(paramsId)) return res.sendStatus(400);
+
+  // const findUserIndex = mockUser.findIndex((user) => user.id === paramsId);
+  // console.log(findUserIndex);
+  // if (findUserIndex === -1) return res.sendStatus(404);
+
+  /* With MiddleWare */
+  const { findUserIndex } = req;
+
   mockUser.splice(findUserIndex);
   return res.sendStatus(200);
 });
