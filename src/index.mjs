@@ -5,6 +5,29 @@ const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
+const mockUser = [
+  { id: 1, product: "mobile", price: "50k" },
+  { id: 2, product: "laptop", price: "60k" },
+  { id: 3, product: "airpods", price: "20k" },
+];
+
+const resolveIndexByUserId = (req, res, next) => {
+  const {
+    params: { id },
+  } = req;
+
+  const parsedId = parseInt(id);
+
+  if (isNaN(parsedId)) return res.sendStatus(400);
+
+  const findUserIndex = mockUser.findIndex(
+    (product) => product.id === parsedId
+  );
+
+  if (findUserIndex === -1) return res.sendStatus(404);
+  req.findUserIndex = findUserIndex;
+  next();
+};
 
 app.get("/", (req, res) => {
   res.status(201).send({ msg: "hellow" });
@@ -16,12 +39,6 @@ app.get("/api/user", (req, res) => {
     { id: 3, firstName: "vaishu", lastName: "selva" },
   ]);
 });
-
-const mockUser = [
-  { id: 1, product: "mobile", price: "50k" },
-  { id: 2, product: "laptop", price: "60k" },
-  { id: 3, product: "airpods", price: "20k" },
-];
 
 // find user using requestiong params
 app.get("/api/product/:id", (req, res) => {
@@ -63,21 +80,29 @@ app.post("/api/product", (req, res) => {
 
 // PUT method
 
-app.put("/api/product/:id", (req, res) => {
-  const {
-    body,
-    params: { id },
-  } = req;
+// app.put("/api/product/:id", (req, res) => {
+// const {
+//   body,
+//   params: { id },
+// } = req;
 
-  const parseId = parseInt(id);
+// const parseId = parseInt(id);
 
-  if (isNaN(parseId)) return res.sendStatus(400);
+// if (isNaN(parseId)) return res.sendStatus(400);
 
-  const findUseIndex = mockUser.find((product) => product.id === parseId);
+// const findUseIndex = mockUser.find((product) => product.id === parseId);
 
-  if (findUseIndex - 1) return res.sendStatus(404);
-  mockUser[findUseIndex] = { id: { parseId, ...body } };
+// if (findUseIndex - 1) return res.sendStatus(404);
+//   mockUser[findUseIndex] = { id: { parseId, ...body } };
+//   console.log(mockUser[findUseIndex], "check");
+//   return res.sendStatus(200);
+// });
 
+//  after use middleware
+
+app.put("/api/product/:id", resolveIndexByUserId, (req, res) => {
+  const { body, findUserIndex } = req;
+  mockUser[findUserIndex] = { id: mockUser[findUserIndex].id, ...body };
   return res.sendStatus(200);
 });
 // PATCH method
@@ -91,7 +116,7 @@ app.patch("/api/product/:id", (req, res) => {
   console.log(parseIds);
   if (isNaN(parseIds)) return res.send(400);
 
-  const findexIndex = mockUser.find((product) => product.id === parseIds);
+  const findexIndex = mockUser.findIndex((product) => product.id === parseIds);
   if (findexIndex === -1) return res.sendStatus(404);
   mockUser[findexIndex] = { ...mockUser[findexIndex], ...body };
   return res.sendStatus(200);
