@@ -2,10 +2,10 @@ export const createUserValidationSchemas = {
   product: {
     isLength: {
       options: {
-        min: 5,
+        min: 2,
         max: 10,
       },
-      errorMessage: "product must be max 10 character",
+      errorMessage: "product must be min 2 character",
     },
     notEmpty: {
       errorMessage: "Product not empty",
@@ -15,12 +15,12 @@ export const createUserValidationSchemas = {
     },
   },
   price: {
-    isLenght: {
+    isLength: {
       options: {
-        min: 5,
-        max: 10,
+        min: 2,
+        max: 5,
       },
-      errorMessage: "price must be max 10 character",
+      errorMessage: "price must be min 2 character",
     },
     notEmpty: {
       errorMessage: "price not empty",
