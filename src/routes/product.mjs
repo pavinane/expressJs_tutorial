@@ -56,6 +56,8 @@ route.post(
   checkSchema(createUserValidationSchemas),
 
   (req, res) => {
+    console.log(req.session);
+    console.log(req.session.id);
     const result = validationResult(req);
     console.log("res", result);
 

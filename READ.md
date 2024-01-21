@@ -37,3 +37,9 @@ id and which data want to change metion and submit , that particular data will b
 
 # cookies
  -  cokkies can use authentication like a token 
+
+# session
+ - session represent the duration of a usern  website by default HTTP is stateless. we don't know who making request to our server
+ so we need to be able to track the req and know where they are comming from one common usage of session is to manage user authenticatoin session are created the server by generating an object with a session Id
+
+ - npm i express-session
