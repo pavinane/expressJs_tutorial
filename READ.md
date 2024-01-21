@@ -27,6 +27,13 @@ id and which data want to change metion and submit , that particular data will b
 
 # Validation
 
- -  npm install express-validator
+-  npm install express-validator
 
-    * validation can use to field set as a valid
+* validation can use to field set as a valid
+
+# Routes
+
+- routes make code split into small pieces and make code understand and easily
+
+# cookies
+ -  cokkies can use authentication like a token 

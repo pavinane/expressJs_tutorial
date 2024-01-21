@@ -107,7 +107,7 @@ route.patch("/api/product/:id", (req, res) => {
   } = req;
 
   const parseIds = parseInt(id);
-  console.log(parseIds);
+
   if (isNaN(parseIds)) return res.send(400);
 
   const findexIndex = mockUser.findIndex((product) => product.id === parseIds);
