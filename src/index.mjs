@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser";
 import routes from "./routes/index.mjs";
 import session from "express-session";
 import { mockUser } from "./utils/constent.mjs";
+import passport from "passport";
+import "./strategies/local-strategies.mjs";
 
 const app = express();
 
@@ -31,6 +33,9 @@ app.get("/", (req, res) => {
 // fillter user POST Method every method store on routes make simplify the code
 app.use(routes);
 
+// Write these code how to use session to make cookies for user auth
+
+/*  Code start
 app.post("/api/auth", (req, res) => {
   const {
     body: { userName, password },
@@ -68,6 +73,14 @@ app.get("/api/cart", (req, res) => {
   if (!req.session.user) return res.status(401).send({ msg: "Need Login" });
   return res.send(req.session.cart) ?? [];
 });
+
+End Code */
+
+//  Using PassportJs
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.post("/api/auth", passport.authenticate("local"), (req, res) => {});
 app.listen(PORT, () => {
   console.log(`Running Port is ${PORT}`);
 });
