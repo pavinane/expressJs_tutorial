@@ -43,11 +43,31 @@ app.post("/api/auth", (req, res) => {
   return res.status(200).send(findUser);
 });
 app.get("/api/auth/status", (req, res) => {
+  req.sessionStore.get(req.sessionID, (err, session) => {
+    console.log(session);
+  });
+
   return req.session.user
     ? res.status(200).send(req.session.user)
     : res.status(401).send({ msg: "Not Authentication" });
 });
 
+app.post("/api/cart", (req, res) => {
+  if (!req.session.user) return res.status(401).send({ msg: "Need Login" });
+  const { body: item } = req;
+  const { cart } = req.session;
+  if (cart) {
+    cart.push(item);
+  } else {
+    req.session.cart = [item];
+  }
+  return res.status(201).send(item);
+});
+
+app.get("/api/cart", (req, res) => {
+  if (!req.session.user) return res.status(401).send({ msg: "Need Login" });
+  return res.send(req.session.cart) ?? [];
+});
 app.listen(PORT, () => {
   console.log(`Running Port is ${PORT}`);
 });

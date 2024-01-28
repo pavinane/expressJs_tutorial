@@ -11,13 +11,13 @@ export const mockUser = [
     product: "laptop",
     price: "60k",
     userName: "keerthi",
-    password: "Admin@123",
+    password: "Admin@1234",
   },
   {
     id: 3,
     product: "airpods",
     price: "20k",
     userName: "vaishu",
-    password: "Admin@123",
+    password: "Admin@1235",
   },
 ];
