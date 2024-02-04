@@ -1,7 +1,7 @@
 import { validationResult, checkSchema, matchedData } from "express-validator";
 import {
   createQuerrySchemas,
-  createUserValidationSchemas,
+  createProductValidationSchemas,
 } from "../utils/validationSchemas.mjs";
 import { mockUser } from "../utils/constent.mjs";
 import { resolveIndexByUserId } from "../utils/middleware.mjs";
@@ -53,7 +53,7 @@ route.get("/api/product/:id", (req, res) => {
 // POST
 route.post(
   "/api/product",
-  checkSchema(createUserValidationSchemas),
+  checkSchema(createProductValidationSchemas),
 
   (req, res) => {
     console.log(req.session);

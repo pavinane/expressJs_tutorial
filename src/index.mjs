@@ -4,9 +4,16 @@ import routes from "./routes/index.mjs";
 import session from "express-session";
 import { mockUser } from "./utils/constent.mjs";
 import passport from "passport";
+import mongoose from "mongoose";
+
 import "./strategies/local-strategies.mjs";
 
 const app = express();
+// MongoDB Connection
+mongoose
+  .connect("mongodb://localhost/express_practice")
+  .then(() => console.log("Connect database"))
+  .catch((err) => console.log(`Error ${err}`));
 
 app.use(express.json());
 app.use(cookieParser("helloworld"));
@@ -80,7 +87,25 @@ End Code */
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.post("/api/auth", passport.authenticate("local"), (req, res) => {});
+app.post("/api/auth", passport.authenticate("local"), (req, res) => {
+  res.send(200);
+});
+
+app.get("/api/user/status", (req, res) => {
+  console.log("inside the user/status path");
+  console.log(req.user);
+  console.log(req.session);
+  return req.user ? res.send(req.user) : res.send(401);
+});
+
+app.post("/api/user/logout", (req, res) => {
+  if (!res.user) return res.sendStatus(401);
+  req.logOut((err) => {
+    if (err) return res.sendStatus(400);
+    res.send(200);
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Running Port is ${PORT}`);
 });

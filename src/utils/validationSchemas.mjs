@@ -1,4 +1,4 @@
-export const createUserValidationSchemas = {
+export const createProductValidationSchemas = {
   product: {
     isLength: {
       options: {
@@ -27,6 +27,64 @@ export const createUserValidationSchemas = {
     },
     isString: {
       errorMessage: "price must be string",
+    },
+  },
+};
+
+export const createUserValidationSchemas = {
+  userName: {
+    isLength: {
+      options: {
+        min: 2,
+        max: 15,
+      },
+      errorMessage: "userName must be min 2 character",
+    },
+    notEmpty: true,
+  },
+  email: {
+    isLength: {
+      options: {
+        min: 2,
+        max: 25,
+      },
+      errorMessage: "email must be min 2 character",
+    },
+    notEmpty: {
+      errorMessage: "email not empty",
+    },
+    isString: {
+      errorMessage: "email must be string",
+    },
+  },
+  password: {
+    isLength: {
+      options: {
+        min: 2,
+        max: 15,
+      },
+      errorMessage: "password must be min 2 character",
+    },
+    notEmpty: {
+      errorMessage: "password not empty",
+    },
+    isString: {
+      errorMessage: "password must be string",
+    },
+  },
+  displayName: {
+    isLength: {
+      options: {
+        min: 2,
+        max: 15,
+      },
+      errorMessage: "displayName must be min 2 character",
+    },
+    notEmpty: {
+      errorMessage: "displayName not empty",
+    },
+    isString: {
+      errorMessage: "displayName must be string",
     },
   },
 };

@@ -1,4 +1,7 @@
 import { Router } from "express";
+import { User } from "../mongoose/schemas/user.mjs";
+import { validationResult, checkSchema, matchedData } from "express-validator";
+import { createUserValidationSchemas } from "../utils/validationSchemas.mjs";
 
 const route = Router();
 
@@ -16,5 +19,24 @@ route.get("/api/user", (req, res) => {
 
   return res.status(403).send({ msg: "Sorry . You need the correct cookie" });
 });
+
+route.post(
+  "/api/users",
+  checkSchema(createUserValidationSchemas),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) return res.send(result.array());
+
+    const { body } = req;
+    const newUser = new User(body);
+    try {
+      const savedUser = await newUser.save();
+      return res.status(201).send(savedUser);
+    } catch (error) {
+      console.log(error);
+      return res.sendStatus(400);
+    }
+  }
+);
 
 export default route;

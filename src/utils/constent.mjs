@@ -4,6 +4,7 @@ export const mockUser = [
     product: "mobile",
     price: "50k",
     userName: "Pavi",
+    email: "pavi@gmail.com",
     password: "Admin@123",
   },
   {
@@ -11,6 +12,7 @@ export const mockUser = [
     product: "laptop",
     price: "60k",
     userName: "keerthi",
+    email: "keerthi@gmail.com",
     password: "Admin@1234",
   },
   {
@@ -18,6 +20,7 @@ export const mockUser = [
     product: "airpods",
     price: "20k",
     userName: "vaishu",
+    email: "vaisu@gmail.com",
     password: "Admin@1235",
   },
 ];

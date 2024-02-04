@@ -47,3 +47,10 @@ id and which data want to change metion and submit , that particular data will b
 # passport js
 
 - It can be used for (signin with google or facebook) like that way. passport take care mapping the user was logging in  with the session Id
+
+    SerializeUser : it is used to get the user through the post method sharing email/user and password
+    DeserializeUSer: get the userDetails through the Id ny the using of serializeuser
+
+# DataBase 
+
+- first install  npm i mongoose
