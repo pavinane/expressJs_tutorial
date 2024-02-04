@@ -1,6 +1,7 @@
 import passport from "passport";
 import LocalStrategy, { Strategy } from "passport-local";
 import { mockUser } from "../utils/constent.mjs";
+import { User } from "../mongoose/schemas/user.mjs";
 
 passport.serializeUser((user, done) => {
   console.log("inside serializeuser");
@@ -8,11 +9,12 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
+passport.deserializeUser(async (id, done) => {
   console.log("inside deserializeuser");
   console.log(`deserializeuser id : ${id}`);
   try {
-    const findUser = mockUser.find((item) => item.id === id);
+    // const findUser = mockUser.find((item) => item.id === id);
+    const findUser = await User.findById(id);
     if (!findUser) throw new Error("User not Found");
     done(null, findUser);
   } catch (error) {
@@ -21,22 +23,21 @@ passport.deserializeUser((id, done) => {
 });
 
 export default passport.use(
-  new LocalStrategy(
-    { usernameField: "username" },
-    (username, password, done) => {
-      console.log(mockUser);
-      console.log(`username: ${username}`);
-      console.log(`Password: ${password}`);
-      try {
-        const findUser = mockUser.find((user) => user.userName === username);
-        if (!findUser) throw new Error("User not found");
-        if (findUser.password !== password)
-          throw new Error("Invalid Credentials");
+  new LocalStrategy(async (username, password, done) => {
+    console.log(mockUser);
+    console.log(`username: ${username}`);
+    console.log(`Password: ${password}`);
+    try {
+      // const findUser = mockUser.find((user) => user.userName === username);
+      const findUser = await User.findOne({ userName: username });
+      console.log("find", findUser);
+      if (!findUser) throw new Error("User not found");
+      if (findUser.password !== password)
+        throw new Error("Invalid Credentials");
 
-        done(null, findUser);
-      } catch (error) {
-        done(error, null);
-      }
+      done(null, findUser);
+    } catch (error) {
+      done(error, null);
     }
-  )
+  })
 );

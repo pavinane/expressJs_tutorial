@@ -54,3 +54,12 @@ id and which data want to change metion and submit , that particular data will b
 # DataBase 
 
 - first install  npm i mongoose
+    
+    - connect with mongoDB
+    - create schema and impleted through API in different Method
+    -add session and cookies
+
+# HashPassword
+    
+    npm i bcrypt
+    To make a password to bcrypt password

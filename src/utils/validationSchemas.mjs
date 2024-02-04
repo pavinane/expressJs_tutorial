@@ -58,19 +58,7 @@ export const createUserValidationSchemas = {
     },
   },
   password: {
-    isLength: {
-      options: {
-        min: 2,
-        max: 15,
-      },
-      errorMessage: "password must be min 2 character",
-    },
-    notEmpty: {
-      errorMessage: "password not empty",
-    },
-    isString: {
-      errorMessage: "password must be string",
-    },
+    notEmpty: true,
   },
   displayName: {
     isLength: {
